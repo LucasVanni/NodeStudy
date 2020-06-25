@@ -1,15 +1,36 @@
-// Aplicação específica
-import express from 'express';
+const express = require('express');
+
+// Mustache
+const mustache = require('mustache-express');
 
 // Rotas
-import routes from './routes';
+const routes = require('./routes');
 
 // Configurações
 
-const App = express();
+// express -> auxilia no desenvolvimento do servidor
+const app = express();
 
-App.use(express.json());
+app.use(express.json());
 
-App.use(routes);
+app.use(routes);
 
-export default App;
+// Aplicando a engine, e enviando a biblioteca utilizada
+app.engine('mst', mustache());
+
+// Especifica para que o motor servirá
+app.set('view engine', 'mst');
+
+app.set('views', `${__dirname}/views`);
+
+// O navegador precisa saber onde está o arquivo
+
+// app.get('/', (req, res) => {
+//     res.json('Hello World')
+// });
+//
+// // OU
+//
+// app.use('/', routes);
+
+module.exports = app;

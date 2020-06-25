@@ -1,10 +1,22 @@
-import app from './app';
+const app = require('./app');
+const mongoose = require('mongoose')
 
-require('dotenv').config({path: 'variables.env'});
+require('dotenv').config({path: '.env'})
 
-// Porta do servidor setada
-    app.set('port', process.env.PORT || 3333);
+//Conexão ao Banco de dados
+mongoose.connect(
+    process.env.DATABASE,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }).then(() => {
+    console.log('Connection has been succeed')
+});
+mongoose.Promise = global.Promise;
+mongoose.connection.on('error', error => {
+    console.error(`ERRO ${error.message}`)
+})
 
-const server = app.listen(app.get('port'), () => {
-    console.log(`Servidor rodando na porta: ${server.address().port}`)
+app.listen(process.env.PORT || 2222, () => {
+    console.log("Servidor rodando na porta " + process.env.PORT)
 });
